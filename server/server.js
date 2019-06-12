@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
-app.use('api/shift', shiftRouter);
+app.use('/api/shift', shiftRouter);
 
 //serve static files
 app.use(express.static('build'));
