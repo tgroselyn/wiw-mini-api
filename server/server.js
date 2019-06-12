@@ -1,25 +1,23 @@
 //server setup
 const express = require('express');
 const app = express();
+const shiftRouter = require('./routes/shift.router.js');
 
-//middleware
+//use body parser middleware
 const bodyParser = require('body-parser');
-
-//route includes
-
-//body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
+app.use('api/shift', shiftRouter);
 
-// Serve static files
+//serve static files
 app.use(express.static('build'));
 
-// App Set //
+//set port
 const PORT = process.env.PORT || 5000;
 
-/** Listen * */
+//start server
 app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`);
 });
