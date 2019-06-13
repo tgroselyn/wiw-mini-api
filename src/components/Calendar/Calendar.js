@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import './Calendar.css';
+// import './Calendar.css';
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
@@ -28,14 +28,12 @@ class Calendar extends Component {
         })
 
         return (
-            <div className="Calendar">
-                <BigCalendar
-                    localizer={localizer}
-                    defaultDate={new Date()}
-                    defaultView="week"
-                    events={formattedEvents}
-                />
-            </div>
+            <BigCalendar
+                localizer={localizer}
+                defaultDate={new Date()}
+                defaultView="week"
+                events={formattedEvents}
+            />
         );
     }
 }

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import Calendar from '../Calendar/Calendar';
 import './App.css';
 
@@ -31,8 +32,8 @@ class App extends Component {
 
   handleSubmit = () => {
     let postData = {
-      start: this.state.newShift.startDate + 'T' + this.state.newShift.startTime + ':00.000Z',
-      end: this.state.newShift.endDate + 'T' + this.state.newShift.endTime + ':00.000Z',
+      start: this.state.newShift.startDate + ' ' + this.state.newShift.startTime,
+      end: this.state.newShift.endDate + ' ' + this.state.newShift.endTime,
       title: this.state.newShift.employeeName
     }
 
@@ -60,6 +61,7 @@ class App extends Component {
   render() {
 
     console.log(this.state.shiftData);
+
     return (
       <div className="App">
         <header>
@@ -71,7 +73,8 @@ class App extends Component {
           </div>
         </header>
         <main>
-          <div className="shiftForm">
+          <div className="addShiftForm">
+            <h2>Add New Shift</h2>
             <input
               type="text"
               placeholder="employee name"
@@ -96,14 +99,21 @@ class App extends Component {
             <button onClick={this.handleSubmit}>add new shift</button>
           </div>
           <div className="shiftList">
+            <h2>List View</h2>
             {this.state.shiftData &&
               this.state.shiftData.map(shift => {
-                return <p key={shift.id}>start: {shift.start}, end: {shift.end}</p>
+                return <p key={shift.id}>{shift.title}: {moment(shift.start).format('lll')} to {moment(shift.end).format('lll')}</p>
               })
             }
           </div>
-          <Calendar events={this.state.shiftData}/>
+          <div className="shiftCalendar">
+            <h2>Calendar View</h2>
+            <Calendar events={this.state.shiftData} />
+          </div>
         </main>
+        <footer>
+          <h4>Thanks for viewing!</h4>
+        </footer>
       </div>
     );
   }
