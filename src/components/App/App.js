@@ -7,10 +7,10 @@ class App extends Component {
   state = {
     shiftData: null,
     newShift: {
-      startDate: null,
-      startTime: null,
-      endDate: null,
-      endTime: null
+      startDate: '',
+      startTime: '',
+      endDate: '',
+      endTime: ''
     }
   }
   
@@ -29,16 +29,16 @@ class App extends Component {
 
   handleSubmit = () => {
     let postData = {
-      start: this.state.newShift.startDate + ' ' + this.state.newShift.startTime,
-      end: this.state.newShift.endDate + ' ' + this.state.newShift.endTime,
+      start: this.state.newShift.startDate + 'T' + this.state.newShift.startTime + ':00.000Z',
+      end: this.state.newShift.endDate + 'T' + this.state.newShift.endTime + ':00.000Z'
     }
+
     axios.post('/api/shift', postData).then(response => {
-      console.log(response.data);
       if (response.data === 'Created') {
-        alert('success!');
+        alert('shift created!');
         this.fetchShifts();
       } else {
-        alert('failed!');
+        alert('cannot create shift due to overlap!');
       }
     });
   }
@@ -55,9 +55,6 @@ class App extends Component {
   }
 
   render() {
-
-    console.log(this.state);
-
     return (
       <div className="App">
         <header>

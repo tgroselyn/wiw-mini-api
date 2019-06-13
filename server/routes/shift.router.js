@@ -9,8 +9,6 @@ router.get('/', (req, res) => {
     let sqlQuery = `SELECT * FROM "shifts" ORDER BY "start" ASC;`;
     pool.query(sqlQuery)
         .then(result => {
-            let doesItOverlap = overlap(result.rows[1].start, result.rows[1].end, result.rows[2].start, result.rows[2].end);
-            console.log('does it overlap?', doesItOverlap)
             res.send(result.rows);
         })
         .catch(err => {
@@ -21,16 +19,41 @@ router.get('/', (req, res) => {
 
 //post a shift
 router.post('/', (req, res) => {
-    let sqlQuery = `INSERT INTO "shifts" ("start", "end") VALUES ($1, $2);`;
-    let sqlValues = [req.body.start, req.body.end]
-    pool.query(sqlQuery, sqlValues)
-        .then(result => {
-            res.sendStatus(201);
+    //get existing shifts first
+    const getQuery = `SELECT * FROM "shifts" ORDER BY "start" ASC;`;
+    pool.query(getQuery).then(result => {
+        //then, loop through them to see if any overlap - abort
+        // for (let shift of result.rows) {
+        //     if (overlap(req.body.start, req.body.end, shift.start, shift.end)){
+        //         console.log('overlapping shift');
+        //         res.sendStatus(500);
+        //     }
+        // }
+        const overlapResult = result.rows.map(shift => {
+            return overlap(req.body.start, req.body.end, shift.start, shift.end);
         })
-        .catch(err => {
-            console.log('error from shiftRouter POST:', err);
-            res.sendStatus(500);
-        })
+
+        //if no overlaps, post the new shift
+        if (!overlapResult.includes(true)) {
+            const postQuery = `INSERT INTO "shifts" ("start", "end") VALUES ($1, $2);`;
+            const postValues = [req.body.start, req.body.end];
+            pool.query(postQuery, postValues)
+                .then(postResult => {
+                    res.sendStatus(201);
+                })
+                .catch(err => {
+                    console.log('error from shiftRouter POST:', err);
+                    res.sendStatus(500);
+                })
+        } else {
+            console.log('overlap detected')
+            res.send('overlap');
+        }
+
+    }).catch(err => {
+        console.log('error from the shiftRouter POST:', err);
+        res.sendStatus(500);
+    })
 });
 
 module.exports = router;

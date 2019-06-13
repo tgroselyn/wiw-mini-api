@@ -1,25 +1,22 @@
-function timeOverlaps(a_start, a_end, b_start, b_end) {
-    if (a_start <= b_start && b_start <= a_end) return true; // b starts in a
-    if (a_start <= b_end && b_end <= a_end) return true; // b ends in a
-    if (b_start < a_start && a_end < b_end) return true; // a ends in b
-    return false;
-}
+const moment = require('moment');
 
-function multipleTimeOverlaps() {
-    let i, j;
-    if (arguments.length % 2 !== 0)
-        throw new TypeError('Arguments length must be a multiple of 2');
-    for (i = 0; i < arguments.length - 2; i += 2) {
-        for (j = i + 2; j < arguments.length; j += 2) {
-            if (
-                timeOverlaps(
-                    arguments[i], arguments[i + 1],
-                    arguments[j], arguments[j + 1]
-                )
-            ) return true;
-        }
+function timeOverlaps(a_start_in, a_end_in, b_start_in, b_end_in) {
+    //use moment for easier comparisons
+    const a_start = moment(a_start_in);
+    const a_end = moment(a_end_in);
+    const b_start = moment(b_start_in);
+    const b_end = moment(b_end_in);
+
+    //check for overlaps
+    if (a_start.isSameOrBefore(b_start) && b_start.isSameOrBefore(a_end)) {
+        return true; // b starts in a
+    } else if (a_start.isSameOrBefore(b_end) && b_end.isSameOrBefore(a_end)) {
+        return true; // b ends in a
+    } else if (b_start.isBefore(a_start) && a_end.isBefore(b_end)) {
+        return true; // a ends in b
+    } else {
+        return false; //no overlap
     }
-    return false;
 }
 
-module.exports = multipleTimeOverlaps;
+module.exports = timeOverlaps;
