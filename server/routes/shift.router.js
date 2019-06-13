@@ -35,8 +35,8 @@ router.post('/', (req, res) => {
 
         //if no overlaps, post the new shift
         if (!overlapResult.includes(true)) {
-            const postQuery = `INSERT INTO "shifts" ("start", "end") VALUES ($1, $2);`;
-            const postValues = [req.body.start, req.body.end];
+            const postQuery = `INSERT INTO "shifts" ("start", "end", "title") VALUES ($1, $2, $3);`;
+            const postValues = [req.body.start, req.body.end, req.body.title];
             pool.query(postQuery, postValues)
                 .then(postResult => {
                     res.sendStatus(201);

@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
-import './App.css';
 import axios from 'axios';
+import Calendar from '../Calendar/Calendar';
+import './App.css';
 
 class App extends Component {
 
   state = {
-    shiftData: null,
+    shiftData: [],
     newShift: {
       startDate: '',
       startTime: '',
       endDate: '',
-      endTime: ''
+      endTime: '',
+      employeeName: ''
     }
   }
   
@@ -30,7 +32,8 @@ class App extends Component {
   handleSubmit = () => {
     let postData = {
       start: this.state.newShift.startDate + 'T' + this.state.newShift.startTime + ':00.000Z',
-      end: this.state.newShift.endDate + 'T' + this.state.newShift.endTime + ':00.000Z'
+      end: this.state.newShift.endDate + 'T' + this.state.newShift.endTime + ':00.000Z',
+      title: this.state.newShift.employeeName
     }
 
     axios.post('/api/shift', postData).then(response => {
@@ -55,6 +58,8 @@ class App extends Component {
   }
 
   render() {
+
+    console.log(this.state.shiftData);
     return (
       <div className="App">
         <header>
@@ -67,6 +72,11 @@ class App extends Component {
         </header>
         <main>
           <div className="shiftForm">
+            <input
+              type="text"
+              placeholder="employee name"
+              value={this.state.newShift.employeeName}
+              onChange={this.handleChange('employeeName')} />
             <input
               type="date"
               value={this.state.newShift.startDate}
@@ -92,6 +102,7 @@ class App extends Component {
               })
             }
           </div>
+          <Calendar events={this.state.shiftData}/>
         </main>
       </div>
     );
