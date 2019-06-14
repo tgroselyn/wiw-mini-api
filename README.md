@@ -39,7 +39,7 @@ API includes two routes
 user.router.js
 - [x] POST route for logging in as "Employee" or "Manager"
     - required fields:
-        - "username" : <string>
+        - "username" (string, example: "Manager")
 - [x] GET route for getting back logged in user
 
 shift.router.js
@@ -47,9 +47,9 @@ shift.router.js
 - [x] GET route for getting all shifts back from the database
 - [x] POST route for adding a new shift (protected, uses overlap module)
     - required fields:
-        - "start": <date string> (i.e. "2019/06/11 06:30:00")
-	    - "end": "<date string>"
-	    - "title": <string>
+        - "start" (date string, example: "2019/06/11 06:30:00")
+	    - "end" (date string)
+	    - "title" (string, example: "Thomas")
 
 Overlap module checks for overlapping shifts before allowing the POST to complete.
 
