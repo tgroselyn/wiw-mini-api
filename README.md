@@ -1,68 +1,58 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# When I Work Mini API
 
-## Available Scripts
+### Built by Thomas Roselyn
 
-In the project directory, you can run:
+This mini API and front-end application were built as a code challenge for When I Work.
 
-### `npm start`
+## Built With
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+React, Node, Express, and PostgreSQL
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+- [Node.js](https://nodejs.org/en/)
+- [PostgresQL](https://www.postgresql.org/)
+- [Postico](https://eggerapps.at/postico/)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installing
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Steps to get the development environment running:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Fork and clone this project.
+2. Set up a local PostgreSQL database called `wheniwork_mini_api`
+3. Use the database.sql instructions to create a table in your database
+4. In the terminal, `npm install` in the project folder
+5. In the terminal, `npm run server` and `npm run client`
+6. Import the postman.json file into Postman for testing routes
+    - log in to '/user/login' with username "Manager" to get protected routes to work.
 
-### `npm run eject`
+## Documentation
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Completed Features
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+API includes two routes
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+user.router.js
+- [x] POST route for logging in as "Employee" or "Manager"
+- [x] GET route for getting back logged in user
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+shift.router.js
+- [x] DELETE route for deleting all shifts from the database (protected)
+- [x] GET route for getting all shifts back from the database
+- [x] POST route for adding a new shift (protected, uses overlap module)
 
-## Learn More
+Overlap module checks for overlapping shifts before allowing the POST to complete.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The API uses cookie-session as it's auth method. I wanted an extremely lightweight and unobtrusive way to protect the routes. While all it requires to log in is selecting a value from a dropdown, I just wanted to show this could be done. I have used passport.js in other projects for auth and while it's great, it requires a lot more set up.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+I also wanted to avoid using Redux in this project (again to keep it easy to digest), so I'm utilizing local state in several components, passing props, and using axios directly in my component methods. For larger-scale projects, I have used Redux Sagas to retrieve and manipulate my stored data, and have written unit tests for my reducers.
 
-### Code Splitting
+The calendar used is react-big-calendar, which I'm working with for the first time, so considering this a victory.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Minimal styling applied just to make it look a little more legible and When-I-Work-like.
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Postman file is included for testing.
