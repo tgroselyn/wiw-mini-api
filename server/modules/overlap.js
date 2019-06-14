@@ -1,7 +1,9 @@
+//using moment for easier comparisons
 const moment = require('moment');
 
+//time overlaps checks two shifts, each with start and end
+//if there are any overlapping shifts, it returns true
 function timeOverlaps(a_start_in, a_end_in, b_start_in, b_end_in) {
-    //use moment for easier comparisons
     const a_start = moment(a_start_in);
     const a_end = moment(a_end_in);
     const b_start = moment(b_start_in);

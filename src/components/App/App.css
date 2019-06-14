@@ -1,4 +1,5 @@
 .App {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
 }
 
@@ -21,13 +22,27 @@ header {
   left: 25px;
 }
 
-.title {
-  width: 300px;
-  float: right;
+.byline {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.loginForm {
+  margin: 40px auto;
 }
 
 .addShiftForm {
   margin: 50px auto;
+}
+
+.addShiftFormGroup {
+  margin: 10px;
+}
+
+.addShiftFormGroup input {
+  margin: 5px;
+  height: 25px;
+  width: 120px;
+  font-size: 12px;
 }
 
 .shiftList {

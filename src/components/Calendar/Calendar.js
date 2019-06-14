@@ -3,21 +3,14 @@ import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
+//use moment as the localizer
 const localizer = BigCalendar.momentLocalizer(moment);
 
 class Calendar extends Component {
-    state = {
-        events: this.props.events
-        // || [
-            // {
-            //     start: new Date(),
-            //     end: new Date(moment().add(1, "days")),
-            //     title: "Some title"
-            // }
-        // ]
-    };
 
     render() {
+        //map over events handed down on props from App
+        //format the information in a way big calendar can parse
         const formattedEvents = this.props.events.map(event => {
             return {
                 start: new Date(event.start),
@@ -27,6 +20,7 @@ class Calendar extends Component {
         })
 
         return (
+            //big calendar component with formatted events
             <BigCalendar
                 localizer={localizer}
                 defaultDate={new Date()}
@@ -34,7 +28,7 @@ class Calendar extends Component {
                 events={formattedEvents}
             />
         );
-    }
+    } //end render
 }
 
 export default Calendar;

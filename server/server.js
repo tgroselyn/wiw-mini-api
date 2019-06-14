@@ -1,15 +1,25 @@
 //server setup
 const express = require('express');
 const app = express();
-const shiftRouter = require('./routes/shift.router.js');
+const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
+const shiftRouter = require('./routes/shift.router');
+const userRouter = require('./routes/user.router');
 
 //use body parser middleware
-const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//routes
+//use cookie session to store user info (login status) for 15 minutes
+app.use(cookieSession({
+    name: 'session',
+    keys: ['session'],
+    maxAge: 15 * 60 * 1000
+}));
+
+//use routes
 app.use('/api/shift', shiftRouter);
+app.use('/user', userRouter);
 
 //serve static files
 app.use(express.static('build'));

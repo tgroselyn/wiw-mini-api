@@ -1,103 +1,59 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import Login from '../Login/Login';
+import AddShiftForm from '../AddShiftForm/AddShiftForm';
 import Calendar from '../Calendar/Calendar';
 import './App.css';
 
 class App extends Component {
 
+  //store the shift data here after pulling it from the API
   state = {
-    shiftData: [],
-    newShift: {
-      startDate: '',
-      startTime: '',
-      endDate: '',
-      endTime: '',
-      employeeName: ''
-    }
+    shiftData: []
   }
   
+  //on mount, request shift data
   componentDidMount = () => {
     this.fetchShifts();
   }
 
-  handleChange = property => event => {
-    this.setState({
-      newShift: {
-        ...this.state.newShift,
-        [property]: event.target.value
-      }
-    })
-  }
-
-  handleSubmit = () => {
-    let postData = {
-      start: this.state.newShift.startDate + ' ' + this.state.newShift.startTime,
-      end: this.state.newShift.endDate + ' ' + this.state.newShift.endTime,
-      title: this.state.newShift.employeeName
-    }
-
-    axios.post('/api/shift', postData).then(response => {
-      if (response.data === 'Created') {
-        alert('shift created!');
-        this.fetchShifts();
-      } else {
-        alert('cannot create shift due to overlap!');
-      }
-    });
-  }
-
+  //request shift data from the API, then store it in local state
   fetchShifts = () => {
     axios.get('/api/shift').then(response => {
-      // console.log('response from fetch request:', response.data);
-      this.setState({
-        shiftData: response.data
-      })
+      this.setState({ shiftData: response.data });
+    }).catch(err => { console.log(err); });
+  }
+
+  //request that the API delete all existing shifts
+  //run get user first to make sure logged in user is a manager
+  deleteShifts = () => {
+    axios.delete('/api/shift').then(response => {
+      this.fetchShifts();
     }).catch(err => {
-      console.log('error from fetch request', err);
+      console.log(err);
+      alert('must be a manager to delete shifts');
     })
   }
 
   render() {
-
-    console.log(this.state.shiftData);
-
     return (
       <div className="App">
         <header>
+          {/* when i work logo */}
           <div className="logo"></div>
-          <div className="title">
+          <div>
             <h1>When I Work</h1>
             <h2>Mini API</h2>
-            <h3>Built by Thomas Roselyn</h3>
+            <h3 className="byline">Built by Thomas Roselyn</h3>
           </div>
         </header>
         <main>
-          <div className="addShiftForm">
-            <h2>Add New Shift</h2>
-            <input
-              type="text"
-              placeholder="employee name"
-              value={this.state.newShift.employeeName}
-              onChange={this.handleChange('employeeName')} />
-            <input
-              type="date"
-              value={this.state.newShift.startDate}
-              onChange={this.handleChange('startDate')} />
-            <input
-              type="time"
-              value={this.state.newShift.startTime}
-              onChange={this.handleChange('startTime')} />
-            <input
-              type="date"
-              value={this.state.newShift.endDate}
-              onChange={this.handleChange('endDate')} />
-            <input
-              type="time"
-              value={this.state.newShift.endTime}
-              onChange={this.handleChange('endTime')} />
-            <button onClick={this.handleSubmit}>add new shift</button>
-          </div>
+          {/* login component */}
+          <Login />
+          {/* add shift form component */}
+          <AddShiftForm fetchShifts={this.fetchShifts}/>
+          {/* shift list created by mapping through locally stored shift data */}
           <div className="shiftList">
             <h2>List View</h2>
             {this.state.shiftData &&
@@ -105,19 +61,21 @@ class App extends Component {
                 return <p key={shift.id}>{shift.title}: {moment(shift.start).format('lll')} to {moment(shift.end).format('lll')}</p>
               })
             }
+            {/* button to delete all shifts */}
+            <button onClick={this.deleteShifts}>Delete All Shifts</button>
           </div>
           <div className="shiftCalendar">
             <h2>Calendar View</h2>
+            {/* shift calendar component, passing in shift data on props */}
             <Calendar events={this.state.shiftData} />
           </div>
         </main>
         <footer>
-          <h4>Thanks for viewing!</h4>
+          <h3 className="byline">Thanks for viewing!</h3>
         </footer>
       </div>
     );
-  }
-
+  } //end of render
 }
 
 export default App;

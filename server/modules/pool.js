@@ -2,8 +2,8 @@ const pg = require('pg');
 const url = require('url');
 let config = {};
 
+//pool config
 if (process.env.DATABASE_URL) {
-    //heroku config
     let params = url.parse(process.env.DATABASE_URL);
     let auth = params.auth.split(':');
     config = {
@@ -18,7 +18,6 @@ if (process.env.DATABASE_URL) {
     };
 } else {
     config = {
-        //local config
         user: process.env.PG_USER || null,
         password: process.env.DATABASE_SECRET || null,
         host: process.env.DATABASE_SERVER || 'localhost',
